@@ -2,6 +2,7 @@ require("dotenv").config();
 const client = require("./client");
 const {createUser, getUserByEmail} = require('./users');
 const {createBook, getBooks} = require("./books");
+const { createReservation, getReservation, deleteReservation } = require("./reservations");
 
 //TODO import the createBook from books
 const users = [{
@@ -60,28 +61,19 @@ const users = [{
     available: true,
   }];
 
-// const book =[{
-//   title: 'Alexander and the Terrible, Horrible, No Good, Very Bad Day',
-//   author: 'Judith Viorst',
-//   description:
-//     "Alexander and the Terrible, Horrible, No Good, Very Bad Day is a children's picture book by American author Judith Viorst. It was first published in 1972 and tells the story of Alexander, a boy who has a terrible day from start to finish. The book is a humorous look at the everyday frustrations of childhood.",
-//   coverImage:
-//     'https://upload.wikimedia.org/wikipedia/en/2/25/ALEXANDER_TERRIBLE_HORRIBLE.jpg',
-//   available: true,
-// },];
-
 
 //DROP TABLES IF THEY ALREADY EXIST
 const dropTables = async () => {
     try{
-        await client.query(`DROP TABLE IF EXISTS users`);
-        await client.query(`DROP TABLE IF EXISTS books`);
+        await client.query(`DROP TABLE IF EXISTS users CASCADE`);
+        await client.query(`DROP TABLE IF EXISTS books CASCADE`);
+        await client.query(`DROP TABLE IF EXISTS reservations`);
 
     } catch(err){
         console.log(err);
 
     }
-}
+};
 //CREATING TABLES
 const createTables = async () => {
   try {
@@ -101,7 +93,14 @@ const createTables = async () => {
             coverimage VARCHAR(255) DEFAULT 'https://images.pexels.com/photos/7034646/pexels-photo-7034646.jpeg',
             available BOOLEAN DEFAULT true
         
+        )`);
+
+    await client.query(`CREATE TABLE reservations(
+          id SERIAL PRIMARY KEY,
+          bookid INTEGER REFERENCES books(id),
+          userid INTEGER REFERENCES users(id)
         )`)
+
   } catch (err) {
     console.log(err);
   }
@@ -144,6 +143,7 @@ const seedDatabase = async () => {
     console.log("USERS ADDED SUCCESSFULLY");
     console.log("INSERTING BOOKS...");
     await insertBooks();
+    await createReservation({userId: 1, bookId: 1});
     console.log("BOOKS ADDED SUCCESSFULLY");
     console.log("GETTING ALL BOOKS");
     await getBooks();

@@ -1,5 +1,5 @@
 const pg = require("pg");
-console.log(process.env.DB_NAME);
+
 
 const client = new pg.Client({
     host: process.env.DB_HOST,
@@ -7,6 +7,5 @@ const client = new pg.Client({
     database: process.env.DB_NAME,
 });
 
-console.log(client);
 
 module.exports = client;
