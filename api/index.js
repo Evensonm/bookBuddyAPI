@@ -17,6 +17,7 @@ apiRouter.use(async (req,res,next)=>{
             const id = parsedToken && parsedToken.id;
 
             if (id){
+                console.log(id);
                 req.user = await getUserById(id);
                 console.log("the request user", req.user);
                 next();
@@ -41,6 +42,8 @@ apiRouter.use(async (req,res,next)=>{
 apiRouter.use("/books", require("./books"));
 //{baseURL}/api/users
 apiRouter.use("/users", require("./users"));
+
+apiRouter.use("/reservations", require("./reservations"));
 
 //baseurl/api
 apiRouter.get("/", (req,res)=>{

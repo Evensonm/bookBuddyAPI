@@ -9,10 +9,11 @@ const {
 
 const bookRouter = express.Router();
 
+const { createReservation } = require("../db/reservations");
 const {requireUser} = require("./utils");
 // {basURL}/api/books
 
-bookRouter.get("/", async (req, res) => {
+bookRouter.get("/", async (req, res, next) => {
   try {
     const results = await getBooks();
     res.send(results);
@@ -50,7 +51,7 @@ bookRouter.post("/", requireUser, async (req, res) => {
     res.send(result);
   } catch (err) {
     console.log(err);
-    res.send(err);
+ 
   }
 });
 
@@ -78,11 +79,12 @@ bookRouter.patch("/:id", requireUser, async (req, res) => {
     }
     const result = await getBook(id);
     if (!result) {
-      next({ name: "not found", message: " no matching book found" });
+      next({ name: "Not Found", message: " no matching book found" });
       return;
     } else {
       const updated = await updateBook(req.params.id, req.body.available);
       if (updated) {
+        await createReservation({ userId: req.user.id, booksId: updated.id });
         res.send({
           message: " updated successfully",
           updated,
