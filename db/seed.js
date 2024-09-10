@@ -143,16 +143,16 @@ const seedDatabase = async () => {
     console.log("USERS ADDED SUCCESSFULLY");
     console.log("INSERTING BOOKS...");
     await insertBooks();
-    await createReservation({userId: 1, bookId: 1});
-    console.log("BOOKS ADDED SUCCESSFULLY");
-    console.log("GETTING ALL BOOKS");
-    await getBooks();
-    await getUserByEmail("alice@example.com");
+    await createReservation({ userId: 1, booksId: 1 });
+    console.log(await getReservation(1));
+    await deleteReservation(1);
+    console.log("DELETING");
   } catch (err) {
     console.log(err);
-  } finally{
+  } finally {
     client.end();
   }
 };
+
 
 seedDatabase();

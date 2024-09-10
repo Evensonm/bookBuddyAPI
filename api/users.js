@@ -1,12 +1,14 @@
 const express = require("express");
 const {
-  getUsersReservations,
   getUsers,
   getUserById,
   createUser,
   getUserByEmail,
   getUser,
 } = require("../db/users");
+
+const {getUsersReservations} = require("../db/reservations");
+
 const userRouter = express.Router();
 // {basURL}/users/me
 
@@ -29,7 +31,7 @@ userRouter.get("/me", requireUser, async (req, res, next) => {
 });
 
 // post request to {baseURL/api/users/register
-userRouter.post("/register", async (req, res) => {
+userRouter.post("/register", async (req, res, next) => {
   const { firstname, lastname, email, password } = req.body;
   if (!password) {
     res.send("Password not provided");
@@ -64,8 +66,7 @@ userRouter.post("/register", async (req, res) => {
       return;
     } else {
       res.send("error registering, try later");
-    console.log(result);
-    res.send("success");
+   
   return}
   } catch (err) {
     res.send(err);
@@ -86,7 +87,7 @@ userRouter.post("/login", async (req, res) => {
       const token = jwt.sign({id: result.id, email }, process.env.JWT_SECRET, {
         expiresIn: "1w",});
         res.send({
-          message: "registration successfull",
+          message: "registration successful",
           token,});}
     else{
       res.send("wrong credentials")
@@ -101,35 +102,7 @@ userRouter.post("/login", async (req, res) => {
 
 //{baseUrl}/api/users **get all users
 
-userRouter.get("/", async (req, res) => {
-  try {
-    const results = await getUsers();
-    res.send(results);
-  } catch (err) {
-    res.send({ err, message: "something went wrong" });
-  }
-});
 
-//{baseUrl}/api/users/:id **get user by ID
-
-userRouter.get("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await getUserById(id);
-    console.log(result);
-    res.send(result);
-  } catch (err) {
-    res.send({ err, message: "something went wrong" });
-  }
-});
-
-userRouter.get("/test", async (req, res, next) => {
-  try {
-    resjson();
-  } catch (err) {
-    next(err);
-  }
-});
 
 module.exports = userRouter;
 

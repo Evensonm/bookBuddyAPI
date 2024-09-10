@@ -1,15 +1,15 @@
 const client = require('./client');
 
-const createReservation = async ({userId, bookId})=>{
+const createReservation = async ({userId, booksId})=>{
     try{
-        const SQL = `INSERT INTO reservations(userId, bookId) VALUES($1, $2) RETURNING *`;
+        const SQL = `INSERT INTO reservations(userId, booksId) VALUES($1, $2) RETURNING *`;
         const {
-            rows: [reservation],
+            rows: [result],
           } = await client.query(SQL, [
             userId,
-            bookId,
+            booksId,
           ]);
-          return reservation;
+          return result;
     }catch(err){
         throw err;
     }
