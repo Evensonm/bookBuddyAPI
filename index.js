@@ -37,6 +37,7 @@ app.use((err, req, res, next) => {
 });
 
 //LOG THAT PORT IS ACTIVE
+//updated app
 
 app.listen(PORT, () => {
   console.log(`Server alive on port ${PORT}`);
