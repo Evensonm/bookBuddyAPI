@@ -97,7 +97,7 @@ const createTables = async () => {
 
     await client.query(`CREATE TABLE reservations(
           id SERIAL PRIMARY KEY,
-          bookid INTEGER REFERENCES books(id),
+          booksid INTEGER REFERENCES books(id),
           userid INTEGER REFERENCES users(id)
         )`)
 

@@ -9,7 +9,7 @@ const {
   getBook,
 } = require("../db");
 
-const {requireUser} = require("./utils");
+
 
 reservationsRouter.get("/", requireUser, async (req, res, next) => {
   try{
