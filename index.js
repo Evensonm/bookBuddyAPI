@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require('cors');
 
 const PORT = process.env.PORT || 3000;
 
@@ -8,6 +9,9 @@ require("dotenv").config();
 const client = require("./db/client");
 
 client.connect();
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 
 // console.log(process.env.JWT_SECRET);
 
