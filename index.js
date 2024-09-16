@@ -8,6 +8,8 @@ require("dotenv").config();
 
 const client = require("./db/client");
 
+app.use(cors());
+
 client.connect();
 
 app.use(express.json());
